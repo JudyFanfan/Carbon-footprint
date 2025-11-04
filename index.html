@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
@@ -203,6 +203,55 @@
             background-color: #5a6268;
         }
         
+        .impact-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 6px;
+        }
+        
+        .impact-level {
+            text-align: center;
+            flex: 1;
+            padding: 5px;
+        }
+        
+        .impact-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .impact-bar {
+            height: 8px;
+            background: #e0e0e0;
+            margin: 5px 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .impact-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .low-impact .impact-fill {
+            background: #4CAF50;
+            width: 33%;
+        }
+        
+        .medium-impact .impact-fill {
+            background: #FFC107;
+            width: 66%;
+        }
+        
+        .high-impact .impact-fill {
+            background: #F44336;
+            width: 100%;
+        }
+        
         @media (max-width: 600px) {
             .input-section {
                 flex-direction: column;
@@ -231,20 +280,37 @@
                     <div class="food-select">
                         <label for="food">选择食物</label>
                         <select id="food">
+                            <option value="shrimp">人工养殖虾</option>
+                            <option value="fish">人工养殖鱼</option>
+                            <option value="coffee">咖啡</option>
+                            <option value="beer">啤酒</option>
+                            <option value="potatoes">土豆</option>
+                            <option value="nuts">坚果</option>
+                            <option value="almond_milk">杏仁奶</option>
+                            <option value="oat_milk">燕麦奶</option>
+                            <option value="milk">牛奶/羊奶</option>
+                            <option value="soy_milk">豆奶</option>
+                            <option value="chocolate_milk">巧克力牛奶</option>
+                            <option value="dark_chocolate">黑巧克力</option>
+                            <option value="pasta">意大利面</option>
+                            <option value="citrus">桔子橙子类水果</option>
+                            <option value="berries">葡萄和浆果</option>
+                            <option value="avocado">牛油果</option>
                             <option value="beef">牛肉</option>
+                            <option value="eggs">鸡蛋</option>
+                            <option value="rice">米饭</option>
                             <option value="lamb">羊肉</option>
+                            <option value="tea">茶</option>
+                            <option value="wine">葡萄酒</option>
+                            <option value="apple">苹果</option>
+                            <option value="tomatoes">西红柿</option>
+                            <option value="tofu">豆腐</option>
+                            <option value="peas">豌豆</option>
                             <option value="pork">猪肉</option>
                             <option value="chicken">鸡肉</option>
-                            <option value="fish">鱼类</option>
-                            <option value="eggs">鸡蛋</option>
-                            <option value="milk">牛奶</option>
-                            <option value="cheese">奶酪</option>
-                            <option value="rice">大米</option>
-                            <option value="wheat">小麦制品</option>
-                            <option value="potatoes">土豆</option>
-                            <option value="vegetables">蔬菜</option>
-                            <option value="fruits">水果</option>
-                            <option value="nuts">坚果</option>
+                            <option value="banana">香蕉</option>
+                            <option value="bread">面包</option>
+                            <option value="cereal">麦片</option>
                         </select>
                     </div>
                     
@@ -277,6 +343,25 @@
                     <div class="result-title">您的年度食物碳足迹</div>
                     <div class="result-value" id="carbonResult">0 公斤 CO₂e</div>
                     <div class="result-equivalent" id="carEquivalent">相当于驾驶汽车 0 公里</div>
+                    
+                    <div class="impact-scale">
+                        <div class="impact-level low-impact">
+                            <div class="impact-label">低碳</div>
+                            <div class="impact-bar"><div class="impact-fill"></div></div>
+                            <div class="impact-value">0-500 kg</div>
+                        </div>
+                        <div class="impact-level medium-impact">
+                            <div class="impact-label">中等</div>
+                            <div class="impact-bar"><div class="impact-fill"></div></div>
+                            <div class="impact-value">500-1000 kg</div>
+                        </div>
+                        <div class="impact-level high-impact">
+                            <div class="impact-label">高碳</div>
+                            <div class="impact-bar"><div class="impact-fill"></div></div>
+                            <div class="impact-value">1000+ kg</div>
+                        </div>
+                    </div>
+                    
                     <div class="explanation">
                         <p>* 基于每公斤食物产生的二氧化碳当量(CO₂e)计算，包括生产、运输和加工过程。</p>
                         <p>** 汽车行驶等效值基于平均每公里排放 0.2 公斤 CO₂e 计算。</p>
@@ -289,39 +374,74 @@
 
     <script>
         // 食物碳足迹数据 (kg CO₂e per kg of food)
+        // 基于科学研究数据，包括生产、运输和加工过程
         const foodData = {
-            beef: 27.0,      // 牛肉
-            lamb: 39.2,      // 羊肉
-            pork: 12.1,      // 猪肉
-            chicken: 6.9,    // 鸡肉
-            fish: 6.1,       // 鱼类
-            eggs: 4.8,       // 鸡蛋
-            milk: 3.2,       // 牛奶
-            cheese: 13.5,    // 奶酪
-            rice: 4.0,       // 大米
-            wheat: 1.4,      // 小麦制品
-            potatoes: 0.3,   // 土豆
-            vegetables: 2.0, // 蔬菜
-            fruits: 1.1,     // 水果
-            nuts: 2.3        // 坚果
+            shrimp: 12.0,           // 人工养殖虾
+            fish: 6.1,              // 人工养殖鱼
+            coffee: 17.0,           // 咖啡
+            beer: 0.6,              // 啤酒
+            potatoes: 0.3,          // 土豆
+            nuts: 2.3,              // 坚果
+            almond_milk: 0.7,       // 杏仁奶
+            oat_milk: 0.9,          // 燕麦奶
+            milk: 3.2,              // 牛奶/羊奶
+            soy_milk: 1.0,          // 豆奶
+            chocolate_milk: 3.5,    // 巧克力牛奶
+            dark_chocolate: 18.7,   // 黑巧克力
+            pasta: 1.5,             // 意大利面
+            citrus: 0.5,            // 桔子橙子类水果
+            berries: 1.1,           // 葡萄和浆果
+            avocado: 2.5,           // 牛油果
+            beef: 27.0,             // 牛肉
+            eggs: 4.8,              // 鸡蛋
+            rice: 4.0,              // 米饭
+            lamb: 39.2,             // 羊肉
+            tea: 8.5,               // 茶
+            wine: 1.8,              // 葡萄酒
+            apple: 0.4,             // 苹果
+            tomatoes: 1.4,          // 西红柿
+            tofu: 3.2,              // 豆腐
+            peas: 0.9,              // 豌豆
+            pork: 12.1,             // 猪肉
+            chicken: 6.9,           // 鸡肉
+            banana: 0.7,            // 香蕉
+            bread: 1.4,             // 面包
+            cereal: 1.3             // 麦片
         };
         
         // 食物名称映射
         const foodNames = {
+            shrimp: "人工养殖虾",
+            fish: "人工养殖鱼",
+            coffee: "咖啡",
+            beer: "啤酒",
+            potatoes: "土豆",
+            nuts: "坚果",
+            almond_milk: "杏仁奶",
+            oat_milk: "燕麦奶",
+            milk: "牛奶/羊奶",
+            soy_milk: "豆奶",
+            chocolate_milk: "巧克力牛奶",
+            dark_chocolate: "黑巧克力",
+            pasta: "意大利面",
+            citrus: "桔子橙子类水果",
+            berries: "葡萄和浆果",
+            avocado: "牛油果",
             beef: "牛肉",
+            eggs: "鸡蛋",
+            rice: "米饭",
             lamb: "羊肉",
+            tea: "茶",
+            wine: "葡萄酒",
+            apple: "苹果",
+            tomatoes: "西红柿",
+            tofu: "豆腐",
+            peas: "豌豆",
             pork: "猪肉",
             chicken: "鸡肉",
-            fish: "鱼类",
-            eggs: "鸡蛋",
-            milk: "牛奶",
-            cheese: "奶酪",
-            rice: "大米",
-            wheat: "小麦制品",
-            potatoes: "土豆",
-            vegetables: "蔬菜",
-            fruits: "水果",
-            nuts: "坚果"
+            banana: "香蕉",
+            bread: "面包",
+            cereal: "麦片"
         };
         
         // 频率名称映射
@@ -423,6 +543,26 @@
             // 计算汽车行驶等效值 (假设每公里排放0.2公斤 CO₂e)
             const carKm = totalCarbon / 0.2;
             carEquivalent.textContent = `相当于驾驶汽车 ${carKm.toFixed(0)} 公里`;
+            
+            // 更新影响级别指示器
+            updateImpactScale(totalCarbon);
+        }
+        
+        // 更新影响级别指示器
+        function updateImpactScale(carbon) {
+            const impactLevels = document.querySelectorAll('.impact-level');
+            
+            impactLevels.forEach(level => {
+                level.classList.remove('active');
+            });
+            
+            if (carbon < 500) {
+                impactLevels[0].classList.add('active');
+            } else if (carbon < 1000) {
+                impactLevels[1].classList.add('active');
+            } else {
+                impactLevels[2].classList.add('active');
+            }
         }
         
         // 重置计算器
